@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+<body>
+    <div class="container">
+        <div class="card mt-5">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <input class="form-control" id="inpCode" placeholder="ENTER CODE" value="" maxlength="5"  style=" text-transform: uppercase; letter-spacing: 1rem;text-align:center"/>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <button class="btn btn-success btn-block" onclick="convert()">Convert</button>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <input class="form-control" id="inpPassword" readonly style="text-align:center;font-weight:bold" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var table = {
+            First: 'A',
+            Second: 'C',
+            Third: 'Z',
+            Forth: 'U',
+            Fifth: 'N'
+        }
+        var inpCode = document.getElementById("inpCode"),
+            inpPassword = document.getElementById("inpPassword");
+        function convert() {
+            inpPassword.value = "";
+            regex = /^[A-Za-z]{5}$/;
+            if (inpCode.value && inpCode.value.length == 5 && regex.test(inpCode.value)) {
+                var password = '';
+                var code = inpCode.value.toUpperCase();
+
+                var firstNumber = -1;
+                for (var first = table.First; first <= code[0]; first = nextChar(first))
+                    ++firstNumber;
+
+                var secondNumber = -1;
+                for (var second = nextChar(code[0], 2); second <= code[1]; second = nextChar(second))
+                    ++secondNumber;
+
+                var thirdNumber = -1;
+                for (var third = table.Third; third >= code[2]; third = nextChar(third, -1))
+                    ++thirdNumber;
+
+                var forthNumber = -1;
+                for (var forth = nextChar(code[2], -5); forth >= code[3]; forth = nextChar(forth, -1))
+                    ++forthNumber;
+
+                var fifthNumber = -1;
+                for (var fifth = table.Fifth; fifth >= code[4]; fifth = nextChar(fifth, -1))
+                    ++fifthNumber;
+
+                inpPassword.value = `${firstNumber}   ${secondNumber}   ${thirdNumber}   ${forthNumber}   ${fifthNumber}`;
+            }
+            else {
+                alert("خطأ بالادخال");
+            }
+        }
+        
+        function nextChar(char, inc=1) {
+            return String.fromCharCode(char.charCodeAt(0) + inc);
+        }
+
+        function clear() {
+            inpCode.value = "";
+            inpPassword.value = "";
+            inpCode.focus();
+
+        }
+    </script>
+</body>
+</html>
